@@ -65,7 +65,7 @@ export function DiamindComponent({}) {
 			display: <primitive object={mesh}></primitive>,
 		});
 
-		if (process.env.NODE_ENV === "development") {
+		if (true) {
 			const gui = new GUI({ autoPlace: true, container: document.body });
 			gui.domElement.style.position = "fixed";
 			gui.domElement.style.top = "10px";
