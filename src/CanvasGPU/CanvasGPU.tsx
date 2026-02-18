@@ -77,7 +77,7 @@ export const CanvasGPU: any = ({
               antialias: antialias,
               alpha: true,
               logarithmicDepthBuffer: false,
-              forceWebGL: webgpu ? false : webgl,
+              forceWebGL: webgl ? true : webgpu,
 
               // alpha: false,
               // depth: false,
