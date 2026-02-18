@@ -313,7 +313,7 @@ export function getDiamondSystem({
 
       // Sample normal from cube map
       const mappedNormalRaw = cubeTexture(normalCubeTex, d).xyz;
-      let mappedNormal = sub(mul(2.0, mappedNormalRaw), vec3(1.0));
+      const mappedNormal = sub(mul(2.0, mappedNormalRaw), vec3(1.0));
       mappedNormal.assign(normalize(mappedNormal));
 
       // Transform distance to world space for absorption

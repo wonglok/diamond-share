@@ -32,13 +32,7 @@ import { bloom } from "three/addons/tsl/display/BloomNode.js";
 import { fxaa } from "three/addons/tsl/display/FXAANode.js";
 // import { useAppState } from '../World/useAppState';
 
-export function BloomPipeline({}: //
-// url,
-// env = true,
-{
-  // url: string;
-  // env?: boolean;
-}) {
+export function BloomPipeline({}) {
   const [sun, setSun] = useState<ReactNode>(null);
   const scene = useThree((r) => r.scene);
   const camera = useThree((r) => r.camera);
