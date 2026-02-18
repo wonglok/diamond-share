@@ -15,7 +15,7 @@ function App() {
         <Suspense fallback={null}>
           <Environment
             background
-            backgroundIntensity={1.05}
+            backgroundIntensity={1.15}
             files={[`/hdr/sky.hdr`]}
           />
 
@@ -26,14 +26,6 @@ function App() {
           <OrbitControls object-position={[0, 2, 1]} />
 
           <BloomPipeline />
-          {/* <Sphere scale={100}>
-            <meshStandardNodeMaterial
-              roughness={1.0}
-              metalness={0.0}
-              color={"#ffffff"}
-              side={DoubleSide}
-            ></meshStandardNodeMaterial>
-          </Sphere> */}
         </Suspense>
       </CanvasGPU>
     </>
