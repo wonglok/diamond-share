@@ -9,7 +9,7 @@ import {
   Object3D,
   UnsignedByteType,
 } from "three";
-import { Group, PostProcessing, SRGBColorSpace } from "three/webgpu";
+import { PostProcessing, SRGBColorSpace } from "three/webgpu";
 import {
   pass,
   mrt,
@@ -19,9 +19,9 @@ import {
   directionToColor,
   colorToDirection,
   sample,
-  float,
-  mix,
-  blendColor,
+  // float,
+  // mix,
+  // blendColor,
   colorSpaceToWorking,
   roughness,
   metalness,
@@ -45,8 +45,6 @@ export function BloomPipeline() {
       renderer.render(scene, camera);
     };
   });
-
-  //
 
   useEffect(() => {
     if (!scene) {
@@ -149,14 +147,12 @@ export function BloomPipeline() {
     //
 
     // const ssrPass = ssr(
-    // 	scenePassColor,
-    // 	scenePassDepth,
-    // 	sceneNormal,
-    // 	scenePassMetalRough.r,
-    // 	scenePassMetalRough.g,
+    //   scenePassColor,
+    //   scenePassDepth,
+    //   sceneNormal,
+    //   scenePassMetalRough.r,
+    //   scenePassMetalRough.g,
     // ).toInspector("SSR");
-
-    // //
 
     // // gi
     // const giPass = ssgi(
@@ -189,11 +185,15 @@ export function BloomPipeline() {
     // 	camera,
     // );
 
-    const bloomPass = bloom(scenePassColor, 0.1, 1.0, 1.0);
+    //
+
+    const bloomPass = bloom(scenePassColor, 1.0, 1.0, 0.75);
 
     const postProcessing = new PostProcessing(renderer as any);
-    // .add(ssrPass)
+
     const aaColor = fxaa(scenePassColor);
+
+    // .add(ssrPass);
 
     postProcessing.outputNode = add(aaColor, bloomPass.mul(1.0));
 
