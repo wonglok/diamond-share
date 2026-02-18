@@ -1,4 +1,4 @@
-'use client';
+"use client";
 //
 // Copyright © 2026 Wong Lok. MIT Lincesed
 // Praise Jesus
@@ -10,18 +10,18 @@ import {
   useContext,
   useEffect,
   useMemo,
-} from 'react';
-import { create } from 'zustand';
-import * as THREE from 'three/webgpu';
-import { Canvas, extend, type ThreeToJSXElements } from '@react-three/fiber';
+} from "react";
+import { create } from "zustand";
+import * as THREE from "three/webgpu";
+import { Canvas, extend, type ThreeToJSXElements } from "@react-three/fiber";
 import {
   DRACOLoader,
   GLTFLoader,
   HDRLoader,
-} from 'three/examples/jsm/Addons.js';
-import { useRef } from 'react';
+} from "three/examples/jsm/Addons.js";
+import { useRef } from "react";
 
-declare module '@react-three/fiber' {
+declare module "@react-three/fiber" {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface ThreeElements extends ThreeToJSXElements<typeof THREE> {}
 }
@@ -51,7 +51,7 @@ export const CanvasGPU: any = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  let dpr = typeof window !== 'undefined' ? window?.devicePixelRatio || 1 : 1;
+  let dpr = typeof window !== "undefined" ? window?.devicePixelRatio || 1 : 1;
 
   if (dpr >= 2) {
     dpr = dpr / 2;
@@ -60,7 +60,7 @@ export const CanvasGPU: any = ({
   }
 
   if (webgl) {
-    dpr = typeof window !== 'undefined' ? window?.devicePixelRatio || 1 : 1;
+    dpr = typeof window !== "undefined" ? window?.devicePixelRatio || 1 : 1;
   }
 
   return (
@@ -126,7 +126,7 @@ export const importJSONToStore = (store: StoreType, dataJSON: any) => {
   }
 
   // close panel
-  store.setState({ ...state, activeNodeHash: '' });
+  store.setState({ ...state, activeNodeHash: "" });
 
   return;
 };

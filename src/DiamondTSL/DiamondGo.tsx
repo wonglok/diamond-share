@@ -37,8 +37,8 @@ import {
   cubeTexture,
   Loop,
   modelWorldMatrixInverse,
-} from 'three/tsl';
-import { MeshPhysicalNodeMaterial, CubeTexture, Vector3 } from 'three/webgpu';
+} from "three/tsl";
+import { CubeTexture, MeshPhysicalNodeMaterial, Vector3 } from "three/webgpu";
 
 export function getDiamondSystem({
   normalCubeTex,
@@ -136,12 +136,12 @@ export function getDiamondSystem({
       const r = add(mul(roughness, c0), c1);
       const a004 = add(
         mul(min(mul(r.x, r.x), exp2(mul(-9.28, dotNV))), r.x),
-        r.y
+        r.y,
       );
       const AB = add(mul(vec2(-1.04, 1.04), a004), r.zw);
 
       return add(mul(specularColor, AB.x), AB.y);
-    }
+    },
   );
 
   // Sample environment map (specular reflection)
@@ -154,7 +154,7 @@ export function getDiamondSystem({
       // This assumes you have a cube map or PMREM setup
       const sampleColor = cubeTexture(envMapTex, dir);
       return clamp(sampleColor, 0.0, 1.0);
-    }
+    },
   );
 
   // Sample environment with color contribution
@@ -165,7 +165,7 @@ export function getDiamondSystem({
 
       const sampleColor = cubeTexture(envMapTex, flippedDir);
       return clamp(sampleColor, 0.0, 1.0);
-    }
+    },
   );
 
   // Ray-sphere intersection for internal diamond geometry
@@ -176,14 +176,14 @@ export function getDiamondSystem({
     const dir = vec3(
       direction.x,
       div(direction.y, uniforms.squashFactor),
-      direction.z
+      direction.z,
     );
 
     const A = dot(dir, dir);
     const B = mul(2.0, dot(localOrigin, dir));
     const C = sub(
       dot(localOrigin, localOrigin),
-      mul(uniforms.radius, uniforms.radius)
+      mul(uniforms.radius, uniforms.radius),
     );
 
     const disc = sub(mul(B, B), mul(mul(4.0, A), C));
@@ -195,17 +195,17 @@ export function getDiamondSystem({
       const t1 = div(mul(add(negate(B), sqrtDisc), uniforms.geometryFactor), A);
       const t2 = div(
         mul(add(negate(B), negate(sqrtDisc)), uniforms.geometryFactor),
-        A
+        A,
       );
       const t = max(t1, t2);
 
       const finalDir = vec3(
         direction.x,
         mul(direction.y, uniforms.squashFactor),
-        direction.z
+        direction.z,
       );
       result.assign(
-        add(add(localOrigin, uniforms.centreOffset), mul(finalDir, t))
+        add(add(localOrigin, uniforms.centreOffset), mul(finalDir, t)),
       );
     });
 
@@ -254,7 +254,7 @@ export function getDiamondSystem({
     // Calculate Fresnel reflectance at normal incidence
     const f0Temp = div(
       sub(uniforms.refraction, n1),
-      add(uniforms.refraction, n1)
+      add(uniforms.refraction, n1),
     );
     const f0 = mul(f0Temp, f0Temp);
 
@@ -264,7 +264,7 @@ export function getDiamondSystem({
     const newDirectionTemp = refract(
       direction,
       normal,
-      div(n1, uniforms.refraction)
+      div(n1, uniforms.refraction),
     );
     const reflectedDirection = reflect(direction, normal);
 
@@ -272,29 +272,29 @@ export function getDiamondSystem({
       reflectedDirection,
       normal,
       vec3(f0),
-      0.0
+      0.0,
     );
 
     const brdfRefracted = BRDF_Specular_GGX_Environment(
       newDirectionTemp,
       negate(normal),
       vec3(f0),
-      0.0
+      0.0,
     );
 
     attenuationFactor.assign(
-      mul(attenuationFactor, sub(vec3(1.0), brdfRefracted))
+      mul(attenuationFactor, sub(vec3(1.0), brdfRefracted)),
     );
     outColor.addAssign(
       mul(
         SampleSpecularReflection(vec4(1.0), reflectedDirection).rgb,
-        brdfReflected
-      )
+        brdfReflected,
+      ),
     );
 
     // Transform to local space
     const newDirection = normalize(
-      invModelMat.mul(vec4(newDirectionTemp, 0.0)).xyz
+      invModelMat.mul(vec4(newDirectionTemp, 0.0)).xyz,
     ).toVar();
     const currentOrigin = invModelMat.mul(vec4(origin, 1.0)).xyz;
 
@@ -306,7 +306,7 @@ export function getDiamondSystem({
       //
       const intersectedPos = intersectSphere(
         add(currentOrigin, vec3(epsilon)),
-        newDirection
+        newDirection,
       );
       const dist = sub(intersectedPos, currentOrigin);
       const d = normalize(sub(intersectedPos, uniforms.centreOffset));
@@ -323,7 +323,7 @@ export function getDiamondSystem({
       // Apply absorption
       attenuationFactor.assign(
         //
-        mul(attenuationFactor, exp(negate(mul(r, uniforms.absorbption))))
+        mul(attenuationFactor, exp(negate(mul(r, uniforms.absorbption)))),
       );
 
       // Update position with offset
@@ -333,9 +333,9 @@ export function getDiamondSystem({
           intersectedPos,
           mul(
             normalize(sub(intersectedPos, uniforms.centreOffset)),
-            uniforms.distanceOffset
-          )
-        )
+            uniforms.distanceOffset,
+          ),
+        ),
       );
 
       const oldDir = newDirection;
@@ -344,7 +344,7 @@ export function getDiamondSystem({
       const refractResult = refract(
         newDirection,
         mappedNormal,
-        div(uniforms.refraction, n1)
+        div(uniforms.refraction, n1),
       );
 
       // Check for Total Internal Reflection
@@ -358,15 +358,15 @@ export function getDiamondSystem({
             negate(oldDir),
             mappedNormal,
             vec3(f0),
-            0.0
+            0.0,
           );
           const d1 = vModelMatrix.mul(vec4(oldDir, 0.0)).xyz;
           const contrib = mul(
             SampleSpecularContribution(vec4(1.0), d1).rgb,
             mul(
               mul(mul(uniforms.correction, attenuationFactor), uniforms.boost),
-              sub(vec3(1.0), brdfReflectedEsc)
-            )
+              sub(vec3(1.0), brdfReflectedEsc),
+            ),
           );
           outColor.addAssign(contrib);
         });
@@ -376,38 +376,38 @@ export function getDiamondSystem({
           refractResult,
           negate(mappedNormal),
           vec3(f0),
-          0.0
+          0.0,
         );
 
         // Green channel (center)
         const d1 = vModelMatrix.mul(vec4(refractResult, 0.0)).xyz;
         const colorG = mul(
           SampleSpecularContribution(vec4(1.0), d1).rgb,
-          sub(vec3(1.0), brdfRefractedOut)
+          sub(vec3(1.0), brdfRefractedOut),
         );
 
         // Red channel (+aberration)
         const dirR = refract(
           oldDir,
           mappedNormal,
-          div(add(uniforms.refraction, uniforms.aberration), n1)
+          div(add(uniforms.refraction, uniforms.aberration), n1),
         );
         const d2 = vModelMatrix.mul(vec4(dirR, 0.0)).xyz;
         const colorR = mul(
           SampleSpecularContribution(vec4(1.0), d2).rgb,
-          sub(vec3(1.0), brdfRefractedOut)
+          sub(vec3(1.0), brdfRefractedOut),
         );
 
         // Blue channel (-aberration)
         const dirB = refract(
           oldDir,
           mappedNormal,
-          div(sub(uniforms.refraction, uniforms.aberration), n1)
+          div(sub(uniforms.refraction, uniforms.aberration), n1),
         );
         const d3 = vModelMatrix.mul(vec4(dirB, 0.0)).xyz;
         const colorB = mul(
           SampleSpecularContribution(vec4(1.0), d3).rgb,
-          sub(vec3(1.0), brdfRefractedOut)
+          sub(vec3(1.0), brdfRefractedOut),
         );
 
         // Combine channels
@@ -415,8 +415,8 @@ export function getDiamondSystem({
         outColor.addAssign(
           mul(
             mul(mul(combinedColor, uniforms.correction), attenuationFactor),
-            uniforms.boost
-          )
+            uniforms.boost,
+          ),
         );
 
         // Continue reflected ray inside
@@ -425,10 +425,10 @@ export function getDiamondSystem({
           newDirection,
           mappedNormal,
           vec3(f0),
-          0.0
+          0.0,
         );
         attenuationFactor.assign(
-          mul(mul(attenuationFactor, brdfReflectedIn), uniforms.boost)
+          mul(mul(attenuationFactor, brdfReflectedIn), uniforms.boost),
         );
         count.addAssign(int(1));
       });
@@ -455,9 +455,9 @@ export function getDiamondSystem({
         uniforms.mFresnelScale,
         pow(
           abs(add(1.0, dot(normalize(vI), vWorldNormal))),
-          uniforms.mFresnelPower
-        )
-      )
+          uniforms.mFresnelPower,
+        ),
+      ),
     );
     const vReflectionFactor = clamp(fresnel, 0.0, 1.0);
 
@@ -466,7 +466,7 @@ export function getDiamondSystem({
     const finalColor = mix(
       refractedColor,
       mul(refractedColor, vec3(1.0)), // Replace with your standard lighting if needed
-      vReflectionFactor
+      vReflectionFactor,
     );
 
     return vec4(finalColor, 1.0);

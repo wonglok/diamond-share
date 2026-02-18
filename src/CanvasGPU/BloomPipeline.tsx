@@ -1,14 +1,14 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from "react";
 // import { rgbeLoader } from './CanvasGPU';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree } from "@react-three/fiber";
 import {
   Color,
   DirectionalLight,
   // EquirectangularReflectionMapping,
   Object3D,
   UnsignedByteType,
-} from 'three';
-import { PostProcessing, SRGBColorSpace } from 'three/webgpu';
+} from "three";
+import { PostProcessing, SRGBColorSpace } from "three/webgpu";
 import {
   pass,
   mrt,
@@ -25,11 +25,11 @@ import {
   roughness,
   metalness,
   vec2,
-} from 'three/tsl';
-import { ssr } from 'three/addons/tsl/display/SSRNode.js';
-import { bloom } from 'three/addons/tsl/display/BloomNode.js';
+} from "three/tsl";
+import { ssr } from "three/addons/tsl/display/SSRNode.js";
+import { bloom } from "three/addons/tsl/display/BloomNode.js";
 // import { traa } from "three/addons/tsl/display/TRAANode.js";
-import { fxaa } from 'three/addons/tsl/display/FXAANode.js';
+import { fxaa } from "three/addons/tsl/display/FXAANode.js";
 // import { useAppState } from '../World/useAppState';
 
 export function BloomPipeline({}: //
@@ -113,33 +113,33 @@ export function BloomPipeline({}: //
         output: output,
         normal: directionToColor(normalView),
         metalrough: vec2(metalness, roughness), // pack metalness and roughness into a single attachment
-      })
+      }),
     );
 
     const scenePassColor = scenePass
-      .getTextureNode('output')
-      .toInspector('Color');
+      .getTextureNode("output")
+      .toInspector("Color");
     const scenePassNormal = scenePass
-      .getTextureNode('normal')
-      .toInspector('Normal', (node) => {
+      .getTextureNode("normal")
+      .toInspector("Normal", (node) => {
         return colorSpaceToWorking(node, SRGBColorSpace);
       });
 
     const scenePassDepth = scenePass
-      .getTextureNode('depth')
-      .toInspector('Depth', () => {
+      .getTextureNode("depth")
+      .toInspector("Depth", () => {
         return scenePass.getLinearDepthNode();
       });
     const scenePassMetalRough = scenePass
-      .getTextureNode('metalrough')
-      .toInspector('Metalness-Roughness');
+      .getTextureNode("metalrough")
+      .toInspector("Metalness-Roughness");
 
     // optional: optimize bandwidth by reducing the texture precision for normals and metal/roughness
 
-    const normalTexture = scenePass.getTexture('normal');
+    const normalTexture = scenePass.getTexture("normal");
     normalTexture.type = UnsignedByteType;
 
-    const metalRoughTexture = scenePass.getTexture('metalrough');
+    const metalRoughTexture = scenePass.getTexture("metalrough");
     metalRoughTexture.type = UnsignedByteType;
 
     const sceneNormal = sample((uv) => {
