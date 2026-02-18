@@ -14,15 +14,17 @@ function App() {
         {/* <color attach="background" args={["#ffffff"]} /> */}
         <Suspense fallback={null}>
           <Environment
-            environmentIntensity={0.35}
             background
+            backgroundIntensity={1.05}
             files={[`/hdr/sky.hdr`]}
           />
+
           <Spinner>
             <DiamindComponent />
           </Spinner>
 
           <OrbitControls object-position={[0, 2, 1]} />
+
           <BloomPipeline />
           {/* <Sphere scale={100}>
             <meshStandardNodeMaterial
