@@ -7,8 +7,6 @@ import { buildCubeNormal } from "./NormalCubeTSL";
 import { getDiamondSystem } from "./DiamondGo";
 import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
 
-//
-
 export function DiamindComponent() {
   const gl = useThree((r) => r.gl);
 

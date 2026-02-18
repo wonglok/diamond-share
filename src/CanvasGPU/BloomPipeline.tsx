@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState, type ReactNode } from "react";
 // import { rgbeLoader } from './CanvasGPU';
 import { useFrame, useThree } from "@react-three/fiber";
@@ -8,7 +9,7 @@ import {
   Object3D,
   UnsignedByteType,
 } from "three";
-import { PostProcessing, SRGBColorSpace } from "three/webgpu";
+import { Group, PostProcessing, SRGBColorSpace } from "three/webgpu";
 import {
   pass,
   mrt,
@@ -26,14 +27,15 @@ import {
   metalness,
   vec2,
 } from "three/tsl";
-import { ssr } from "three/addons/tsl/display/SSRNode.js";
+
+// import { ssr } from "three/addons/tsl/display/SSRNode.js";
 import { bloom } from "three/addons/tsl/display/BloomNode.js";
 // import { traa } from "three/addons/tsl/display/TRAANode.js";
 import { fxaa } from "three/addons/tsl/display/FXAANode.js";
 // import { useAppState } from '../World/useAppState';
 
-export function BloomPipeline({}) {
-  const [sun, setSun] = useState<ReactNode>(null);
+export function BloomPipeline() {
+  const [sun, setSun] = useState<any>(null);
   const scene = useThree((r) => r.scene);
   const camera = useThree((r) => r.camera);
   const renderer = useThree((r) => r.gl);
@@ -44,11 +46,17 @@ export function BloomPipeline({}) {
     };
   });
 
+  //
+
   useEffect(() => {
+    if (!scene) {
+      return;
+    }
+
     const object: any = new Object3D();
 
-    const dirL = new DirectionalLight(0xffffff, 15);
-    dirL.position.set(-20, 10, 0);
+    const dirL = new DirectionalLight(0xffffff, 2);
+    dirL.position.set(-20, 10, 10);
 
     object.sunLight = dirL;
     object.sunLight.castShadow = true;
@@ -70,8 +78,8 @@ export function BloomPipeline({}) {
     object.sunLight.shadow.radius = 1;
     object.sunLight.shadow.bias = -0.0005;
 
-    const dirR = new DirectionalLight(0xffffff, 15);
-    dirR.position.set(20, 10, 0);
+    const dirR = new DirectionalLight(0xffffff, 2);
+    dirR.position.set(20, 10, -10);
 
     object.moonLight = dirR;
     object.moonLight.castShadow = false;
@@ -98,8 +106,6 @@ export function BloomPipeline({}) {
     object.sunLight.intensity = 1.5;
     object.moonLight.shadow.intensity = 2;
     object.moonLight.intensity = 1.5;
-
-    scene.environmentIntensity = 0.5;
 
     const scenePass = pass(scene, camera);
     scenePass.setMRT(
@@ -183,7 +189,7 @@ export function BloomPipeline({}) {
     // 	camera,
     // );
 
-    const bloomPass = bloom(scenePassColor, 1.0, 1.0, 1.0);
+    const bloomPass = bloom(scenePassColor, 0.1, 1.0, 1.0);
 
     const postProcessing = new PostProcessing(renderer as any);
     // .add(ssrPass)
@@ -198,17 +204,17 @@ export function BloomPipeline({}) {
     //   scene.background = texture;
     //   scene.environment = texture;
 
-    //   setSun(
-    //     <group name="light-player-target">
-    //       <primitive object={object}></primitive>
-    //     </group>
-    //   );
+    setSun(
+      <group name="light-player-target">
+        <primitive object={object}></primitive>
+      </group>,
+    );
 
-    //   setFnc(() => {
-    //     return () => {
-    //       postProcessing.render();
-    //     };
-    //   });
+    setFnc(() => {
+      return () => {
+        postProcessing.render();
+      };
+    });
 
     //   useAppState.setState({ visible: true });
     // });

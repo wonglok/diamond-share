@@ -38,7 +38,12 @@ import {
   Loop,
   modelWorldMatrixInverse,
 } from "three/tsl";
-import { CubeTexture, MeshPhysicalNodeMaterial, Vector3 } from "three/webgpu";
+import {
+  CubeTexture,
+  MeshBasicNodeMaterial,
+  MeshPhysicalNodeMaterial,
+  Vector3,
+} from "three/webgpu";
 
 export function getDiamondSystem({
   normalCubeTex,
@@ -479,14 +484,14 @@ export function getDiamondSystem({
   function createDiamondMaterial() {
     uniforms.normalCube.value = normalCubeTex;
 
-    const material = new MeshPhysicalNodeMaterial({
-      color: 0xffffff,
-      metalness: 0.0,
-      roughness: 0.0,
-      transmission: 0.0, // We handle this manually in shader
-      thickness: 0.0,
-      envMap: envMapTex,
-      envMapIntensity: 1.0,
+    const material = new MeshBasicNodeMaterial({
+      // color: 0xffffff,
+      // metalness: 0.0,
+      // roughness: 0.0,
+      // transmission: 0.0, // We handle this manually in shader
+      // thickness: 0.0,
+      // envMap: envMapTex,
+      // envMapIntensity: 1.0,
     });
 
     // Assign custom TSL shaders
