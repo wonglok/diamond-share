@@ -1,11 +1,10 @@
 import "./App.css";
 import { Suspense, useRef } from "react";
 import { CanvasGPU } from "./CanvasGPU/CanvasGPU.tsx";
-import { Environment, OrbitControls, Sphere } from "@react-three/drei";
+import { Environment, OrbitControls } from "@react-three/drei";
 import { DiamindComponent } from "./DiamondTSL/DiamondComponent.tsx";
 import { BloomPipeline } from "./CanvasGPU/BloomPipeline.tsx";
 import { useFrame } from "@react-three/fiber";
-import { DoubleSide } from "three";
 
 function App() {
   return (
